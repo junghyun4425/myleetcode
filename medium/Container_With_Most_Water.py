@@ -7,8 +7,29 @@ answer: 49   // 최소높이 7, 거리 7일때 가장 많은 물을 저장가능
 
 해석:
 간단하게 이중포문으로 너비를 재면서 맥스값을 구함.
+O(n^2) 이면 통과가 불가능한 문제였기에 발전된 방향으로 다시생각해서 문제를 품. 도저히 줄이는 방법이 생각 안나서 힌트를 봄.
+음... 알고리즘을 푼다는 문제라기 보다는 '하나의 간단한 원칙' 을 꿰뚫을 수 있냐없냐의 문제였음.
+
+간단한 원칙은, 좌우(l,r) 막대중 짧은 막대에 위치한 index를 한칸 좁히는 것. 그 이유는 긴막대의 포인트 옮겨봤자 너비는 더 커질수 없기 때문임.
+(왜냐면 area를 구할때 '짧은 막대길이 x 막대간 너비' 이기 때문임)
+어렵게 생각해 이런 간단한 원칙을 몰랐다는건 조금 아쉬웠던 문제.
 '''
 
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        h_len = len(height)
+        max_a = 0
+        l, r = 0, h_len - 1
+        while l != r:
+            a = (r - l) * (height[l] if height[l] < height[r] else height[r])
+            max_a = a if a > max_a else max_a
+            if height[l] < height[r]:
+                l += 1
+            else:
+                r -= 1
+        return max_a
+
+'''
 class Solution:
     def maxArea(self, height: List[int]) -> int:
         h_len = len(height)
@@ -20,3 +41,4 @@ class Solution:
                 if max_a < a:
                     max_a = a
         return max_a
+'''
