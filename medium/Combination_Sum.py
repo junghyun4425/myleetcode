@@ -12,7 +12,11 @@ answer: [[2,2,3],[7]]
 append(~~) 는 앞리스트에 뒤의 숫자를 포함시켜 주지만 return 값은 None. + 는 리턴 자체가 리스트.
 따라서 dfs(a.append(3), 4) 는 Nonetype을 반환하는 append때문에 에러가 생김.
 따라서 이때는 dfs(a + [3], 4) 를 해주는 것이 옳음.
+-수정-
+코드를 좀더 직관적이고 보기 편하게 수정. (이유는 CombinationSum2 문제에 활용하려다 보니 로직이 꼬여서 재활용이 어려움.
+따라서 좀더 로직을 잘 세분화 시켜서 CombinationSum2 문제에서 그대로 활용하고자 수정함)
 '''
+
 
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
@@ -20,13 +24,13 @@ class Solution:
         candidates.sort()
 
         def dfs(vals, next_target):
-            if not next_target:
+            if next_target == 0:
                 ans.append(vals)
-            for i in candidates:
-                if i > next_target:
-                    break
-                elif not vals or i >= vals[-1]:
-                    dfs(vals + [i], next_target - i)
+            if next_target < 0:
+                return
+            for n in candidates:
+                if not vals or n >= vals[-1]:
+                    dfs(vals + [n], next_target - n)
 
         dfs([], target)
         return ans
