@@ -20,10 +20,38 @@ DP로 문제를 풀어야 하겠지만, 기본 알고리즘이 잘 동작하는�
 이런 케이스를 없애고자 조금은 쓸모없는 -min(dungeon[i][j]-1, 0) 를 계산하고 위의 식 중에서 max값을 찾음.
 결과는 상당히 만족스럽지만, 최종 결과는 time limit exceeded
 
-DP로 다시 풀어보기.
+-DP
+점화식을 세워보면 recursion으로 푸는게 더 복잡해 보여서 iterative하게 해결.
+점화식 구하는것 보다 최소 체력을 구하는 방식이 오히려 더 헷갈렸던 문제.
+최소 체력 구해지는 원리를 간단히 살펴보면,
+i == h, j == w 일때 dungeon[i][j] 가 음수면 최소체력 1에 양수로 바꿔서 더하면 최소로 필요한 체력. 양수면 최소체력이 1이면 충분함.
+그리고 row가 마지막일때, col이 마지막일때를 먼저 구해줘야 함. (dp[i][j] 는 dp[i+1][j] 와 dp[i][j+1] 둘의 영향을 받기 때문)
+그리고 나머지 연산을 수행하면 마지막 연산에 dp[0][0] 최소로 요구하는 체력을 구할 수 있음.
+점화식은,
+dp[i][j] = max(1, 1-dungeon[i][j])                  if i == h, j == w
+         = max(1, dp[i+1][j] - dungeon[i][j])       if i < h, j == w
+         = max(1, dp[h][j+1] - dungeon[h][j])       if i == h, j < w
+         = max(1, min(dp[i+1][j], dp[i][j+1]) - dungeon[i][j])      otherwise
+min 과 max 를 적절히 써야만 해결되는 문제...
 '''
 
+# Second Try. Solution with DP [Success]
+class Solution:
+    def calculateMinimumHP(self, dungeon: List[List[int]]) -> int:
+        h, w = len(dungeon), len(dungeon[0])
+        dp = [[float('inf')] * w for _ in range(h)]
+        dp[h-1][w-1] = max(1, 1-dungeon[h-1][w-1])
+        for i in reversed(range(h-1)):
+            dp[i][w-1] = max(1, dp[i+1][w-1] - dungeon[i][w-1])
+        for j in reversed(range(w-1)):
+            dp[h-1][j] = max(1, dp[h-1][j+1] - dungeon[h-1][j])
+        for i in reversed(range(h-1)):
+            for j in reversed(range(w-1)):
+                dp[i][j] = max(1, min(dp[i+1][j], dp[i][j+1]) - dungeon[i][j])
+        return dp[0][0]
+
 # Solution with Recursion: Timeout [Failed]
+'''
 class Solution:
     def calculateMinimumHP(self, dungeon: List[List[int]]) -> int:
         h, w = len(dungeon)-1, len(dungeon[0])-1
@@ -40,3 +68,4 @@ class Solution:
                 min_req = min(min_req, require)
             return max(-min(dungeon[i][j]-1, 0), -min(dungeon[i][j]-min_req, 0))
         return max(1, search(0, 0))
+'''
