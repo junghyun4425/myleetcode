@@ -15,6 +15,11 @@ dp[i][j] = min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1])   / otherwise
          = dp[i-1][j-1]                                / if word1[i] == word2[j]
 i = word1's range (word1[:i])
 j = word2's range (word2[:j])
+
+Review
+처음부터 다시 풀어봤지만, 마땅히 최적화할 부분이 따로 없었고 이전에 풀었던 방법외에는 따로 생각이 나질 않음.
+이전에 했던 방식과 같게 풀어서 따로 코드는 추가하지 않음.
+DP문제에 차츰 적응해가는 발판이 되었던 복습.
 '''
 
 class Solution:
