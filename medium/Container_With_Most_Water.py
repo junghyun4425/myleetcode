@@ -13,8 +13,27 @@ O(n^2) 이면 통과가 불가능한 문제였기에 발전된 방향으로 다�
 간단한 원칙은, 좌우(l,r) 막대중 짧은 막대에 위치한 index를 한칸 좁히는 것. 그 이유는 긴막대의 포인트 옮겨봤자 너비는 더 커질수 없기 때문임.
 (왜냐면 area를 구할때 '짧은 막대길이 x 막대간 너비' 이기 때문임)
 어렵게 생각해 이런 간단한 원칙을 몰랐다는건 조금 아쉬웠던 문제.
+
+Review
+오랜 고민끝에 풀어낸 문제라 한달이 지난 지금 봐도 알고리즘이 바로 떠올랐던 문제.
+처음부터 다시 풀어봤지만 두개의 포인터로 최대넓이만 찾아가는 알고리즘을 알고있었기에 빠르게 풀수 있었음.
 '''
 
+# Third Try: Same algorithm to second trial. For reviewing
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        l, r = 0, len(height)-1
+        max_a = 0
+        while l < r:
+            max_a = max(max_a, (r-l) * min(height[l], height[r]))
+            if height[l] < height[r]:
+                l += 1
+            else:
+                r -= 1
+        return max_a
+
+# Second Try: Two points algorithm
+'''
 class Solution:
     def maxArea(self, height: List[int]) -> int:
         h_len = len(height)
@@ -28,7 +47,9 @@ class Solution:
             else:
                 r -= 1
         return max_a
+'''
 
+# First Try: Brute Force
 '''
 class Solution:
     def maxArea(self, height: List[int]) -> int:
