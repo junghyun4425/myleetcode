@@ -11,6 +11,11 @@ answer: [1,3,2]
 
 다른 방법으로는 스택을 활용할 수 있음.
 트리의 노드를 스택에 저장해서 재귀함수와 마찬가지로 백트래킹이 가능. 속도 면에서는 두 방식이 동일한 수준이므로 연습삼아 한번 더 풀어본 정도.
+
+Review
+재귀함수와 스택 두가지 방법 모두 다시 풀어봄.
+우선, 이전에 풀었던 재귀함수가 너무 필요없는 조건문이 많았기에, 필수 조건문 하나만 넣어주고 나머진 모두 제거.
+스택으로 풀었을때는 바꿀만한게 딱히 없었어서 다시 풀어본 것에 의미를 둠.
 '''
 
 # Using Stack
@@ -38,14 +43,12 @@ class Solution:
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
         ans = []
-        def recursion(tree):
-            if tree.left:
-                recursion(tree.left)
-            ans.append(tree.val)
-            if tree.right:
-                recursion(tree.right)
-        if not root:
-            return ans
+        def recursion(root):
+            if not root:
+                return
+            recursion(root.left)
+            ans.append(root.val)
+            recursion(root.right)
         recursion(root)
         return ans
 '''
